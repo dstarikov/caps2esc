@@ -9,6 +9,7 @@ to function as usual.
 The CAPSLOCK dual mode functionality remains exactly the same however.
 
 This is forked from: https://github.com/oblitum/caps2esc
+
 All credit goes to Francisco Lopes da Silva.
 
 <sub>_For vi/Vim/NeoVim addicts at last_.</sub>
@@ -30,6 +31,18 @@ ESC when pressed alone is quite handy, specially in vi.
 ## Dependencies
 
 - [libevdev][]
+
+## Installation
+
+On Arch Linux download PKGBUILD and run:
+
+`makepkg -i`
+
+Once that's finished run
+
+`sudo systemctl enable caps2esc.service`
+
+`sudo systemctl start caps2esc.service`
 
 ## Building
 
