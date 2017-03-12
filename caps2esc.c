@@ -66,12 +66,7 @@ int eventmap(const struct input_event *input, struct input_event output[]) {
             output[k++] = ctrl_down;
         }
 
-        if (equal(input, &esc_down))
-            output[k++] = capslock_down;
-        else if (equal(input, &esc_up))
-            output[k++] = capslock_up;
-        else
-            output[k++] = *input;
+        output[k++] = *input;
 
         return k;
     }
@@ -81,12 +76,7 @@ int eventmap(const struct input_event *input, struct input_event output[]) {
         return 0;
     }
 
-    if (equal(input, &esc_down))
-        output[0] = capslock_down;
-    else if (equal(input, &esc_up))
-        output[0] = capslock_up;
-    else
-        output[0] = *input;
+    output[0] = *input;
 
     return 1;
 }

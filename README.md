@@ -1,6 +1,16 @@
 # CAPS2ESC <sub>a linux port</sub>
 
 _Transforming the most useless key **ever** in the most useful one._
+
+This fork removes the functionality of Esc replacing CAPSLOCK.
+The Escape key isn't remapped as it was in the original, allowing it
+to function as usual.
+
+The CAPSLOCK dual mode functionality remains exactly the same however.
+
+This is forked from: https://github.com/oblitum/caps2esc
+All credit goes to Francisco Lopes da Silva.
+
 <sub>_For vi/Vim/NeoVim addicts at last_.</sub>
 
 <a href="http://www.catonmat.net/blog/why-vim-uses-hjkl-as-arrow-keys/">
@@ -9,8 +19,6 @@ _Transforming the most useless key **ever** in the most useful one._
 
 ## What is it?
 
-- **Put what's useless in its place**  
-  <sub>_By moving the CAPSLOCK function to the far ESC location_</sub>
 - **Make what's useful comfortably present, just below your Pinky**  
   <sub>_By moving both ESC and CTRL functions to the CAPSLOCK location_</sub>
 
@@ -34,15 +42,6 @@ The following daemonized sample execution increases the application priority
 responsible):
 
 `sudo nice -n -20 ./caps2esc >caps2esc.log 2>caps2esc.err &`
-
-## Installation
-
-I'm maintaining an Archlinux package on AUR:
-
-- <https://aur.archlinux.org/packages/caps2esc>
-
-It wraps the executable in a systemd service that can be easily started, stopped
-and enabled to execute on boot.
 
 ## How it works
 
