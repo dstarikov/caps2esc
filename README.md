@@ -15,7 +15,9 @@ All credit goes to Francisco Lopes da Silva.
 <sub>_For vi/Vim/NeoVim addicts at last_.</sub>
 
 <a href="http://www.catonmat.net/blog/why-vim-uses-hjkl-as-arrow-keys/">
+
 ![ADM-3A terminal](http://www.catonmat.net/images/why-vim-uses-hjkl/lsi-adm3a-full-keyboard.jpg)
+
 </a>
 
 ## What is it?
@@ -106,7 +108,9 @@ evdev, udev and uinput.
 ## License
 
 <a href="http://www.gnu.org/copyleft/gpl.html">
+
 ![GPL v3](https://www.gnu.org/graphics/gplv3-127x51.png)
+
 </a>
 
 Copyright © 2016 Francisco Lopes da Silva.
