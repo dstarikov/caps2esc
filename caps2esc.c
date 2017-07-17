@@ -22,12 +22,15 @@
 
 // clang-format off
 const struct input_event
-esc_down      = {.type = EV_KEY, .code = KEY_ESC,      .value = 1},
-ctrl_down     = {.type = EV_KEY, .code = KEY_LEFTCTRL, .value = 1},
-capslock_down = {.type = EV_KEY, .code = KEY_CAPSLOCK, .value = 1},
-esc_up        = {.type = EV_KEY, .code = KEY_ESC,      .value = 0},
-ctrl_up       = {.type = EV_KEY, .code = KEY_LEFTCTRL, .value = 0},
-capslock_up   = {.type = EV_KEY, .code = KEY_CAPSLOCK, .value = 0};
+esc_up          = {.type = EV_KEY, .code = KEY_ESC,      .value = 0},
+ctrl_up         = {.type = EV_KEY, .code = KEY_LEFTCTRL, .value = 0},
+capslock_up     = {.type = EV_KEY, .code = KEY_CAPSLOCK, .value = 0},
+esc_down        = {.type = EV_KEY, .code = KEY_ESC,      .value = 1},
+ctrl_down       = {.type = EV_KEY, .code = KEY_LEFTCTRL, .value = 1},
+capslock_down   = {.type = EV_KEY, .code = KEY_CAPSLOCK, .value = 1},
+esc_repeat      = {.type = EV_KEY, .code = KEY_ESC,      .value = 2},
+ctrl_repeat     = {.type = EV_KEY, .code = KEY_LEFTCTRL, .value = 2},
+capslock_repeat = {.type = EV_KEY, .code = KEY_CAPSLOCK, .value = 2};
 // clang-format on
 
 int equal(const struct input_event *first, const struct input_event *second) {
@@ -44,7 +47,8 @@ int eventmap(const struct input_event *input, struct input_event output[]) {
     }
 
     if (capslock_is_down) {
-        if (equal(input, &capslock_down) || input->code == KEY_LEFTCTRL) {
+        if (equal(input, &capslock_down) || equal(input, &capslock_repeat) ||
+            input->code == KEY_LEFTCTRL) {
             return 0;
         }
         if (equal(input, &capslock_up)) {
@@ -78,6 +82,10 @@ int eventmap(const struct input_event *input, struct input_event output[]) {
 
     output[0] = *input;
 
+    // If ESC is pressed down followed by capslock then toggle caps lock.  
+    if (output[0].code == KEY_ESC)
+        output[0].code = KEY_CAPSLOCK;
+
     return 1;
 }
 
@@ -103,6 +111,8 @@ int eventmap_loop(const char *devnode) {
         goto teardown_grab;
     if (libevdev_enable_event_code(dev, EV_KEY, KEY_LEFTCTRL, NULL) < 0)
         goto teardown_grab;
+    if (libevdev_disable_event_code(dev, EV_KEY, KEY_WLAN) < 0)
+        goto teardown_grab;
 
     struct libevdev_uinput *udev;
     if (libevdev_uinput_create_from_device(dev, LIBEVDEV_UINPUT_OPEN_MANAGED,
@@ -111,7 +121,7 @@ int eventmap_loop(const char *devnode) {
 
     for (;;) {
         struct input_event input;
-        int                rc = libevdev_next_event(
+        int rc = libevdev_next_event(
             dev, LIBEVDEV_READ_FLAG_NORMAL | LIBEVDEV_READ_FLAG_BLOCKING,
             &input);
 
@@ -175,8 +185,8 @@ int should_grab(struct udev_device *device, int initial_scan) {
             return 0;
     }
 
-    const char  input_prefix[] = "/dev/input/event";
-    const char *devnode        = udev_device_get_devnode(device);
+    const char input_prefix[] = "/dev/input/event";
+    const char *devnode       = udev_device_get_devnode(device);
     if (!devnode || strncmp(devnode, input_prefix, sizeof(input_prefix) - 1))
         return 0;
 
